@@ -417,267 +417,35 @@ export PATH="$HOME/.openclaw/workspace/skills/alpaca-py-cli/scripts:$PATH"
 
 ## Initialization (For Agents)
 
-### Intelligent Setup with `alpaca init`
+### Quick Setup with `alpaca init`
 
-The `init` command provides an intelligent setup wizard that adapts based on the agent's capabilities.
-
-#### Command
+When a user needs to set up Alpaca trading, simply run:
 
 ```bash
 alpaca init
 ```
 
-#### How It Works
+**The CLI will:**
+- Check if already configured
+- Detect agent capabilities (email access, browser automation)
+- Choose automatic or manual setup mode
+- Guide the user through registration step-by-step
+- Collect and save API keys
+- Verify the setup
 
-**Step 1: Detection**
-The wizard first checks if Alpaca is already configured by looking for environment variables:
-- `ALPACA_API_KEY`
-- `ALPACA_SECRET_KEY`
-- `ALPACA_PAPER`
+**Agent's Role:**
+- Run `alpaca init` when user wants to start trading
+- Let the CLI handle all the guidance and prompts
+- The wizard is designed to be self-explanatory
+- After completion, verify with `alpaca clock`
 
-If already configured, it offers to reconfigure.
-
-**Step 2: Mode Selection**
-The wizard presents two setup modes:
-
-1. **Automatic Mode** (for agents with email access)
-2. **Manual Mode** (fallback for all agents)
-
-#### Automatic Mode (Recommended for Capable Agents)
-
-**Requirements:**
-- Browser skill (for web automation)
-- Email skill (for verification) - e.g., `gog` skill for Gmail access
-- User information (name, address, date of birth)
-
-**Agent Workflow:**
-
-1. **Check Capabilities**
-   ```bash
-   # Agent checks if it has email access
-   # Example: Check if gog skill is available
-   which gog || check for email tools
-   ```
-
-2. **Gather User Information**
-   ```
-   Agent: "I'll help you set up Alpaca paper trading. I need some information:"
-   Agent: "What's your full name?"
-   User: "John Doe"
-   Agent: "What's your email address?"
-   User: "john@example.com"
-   Agent: "What's your date of birth? (YYYY-MM-DD)"
-   User: "1990-01-15"
-   Agent: "What's your address?"
-   User: "123 Main St, San Francisco, CA 94102"
-   ```
-
-3. **Run Init with Automatic Mode**
-   ```bash
-   alpaca init
-   # Choose option 1 (Automatic)
-   ```
-
-4. **Browser Automation** (Future Implementation)
-   ```
-   Agent uses browser skill to:
-   - Navigate to https://alpaca.markets
-   - Click "Sign Up"
-   - Fill registration form with user info
-   - Submit form
-   ```
-
-5. **Email Verification**
-   ```
-   Agent uses email skill to:
-   - Check inbox for verification email from Alpaca
-   - Extract verification link
-   - Click verification link in browser
-   ```
-
-6. **API Key Retrieval**
-   ```
-   Agent uses browser skill to:
-   - Log in to Alpaca dashboard
-   - Navigate to API Keys section
-   - Generate Paper Trading API keys
-   - Copy API Key and Secret Key
-   ```
-
-7. **Configuration**
-   ```
-   Agent automatically runs:
-   - Saves keys to environment variables
-   - Sets ALPACA_PAPER=true
-   - Writes to shell config (~/.zshrc)
-   ```
-
-8. **Verification**
-   ```bash
-   alpaca clock
-   # Agent confirms setup is working
-   ```
-
-**Note:** Automatic mode is currently a placeholder. Full implementation requires browser and email skill integration.
-
-#### Manual Mode (Current Implementation)
-
-**For agents without email access or as fallback:**
-
-**Agent Workflow:**
-
-1. **Run Init**
-   ```bash
-   alpaca init
-   # Choose option 2 (Manual)
-   ```
-
-2. **Open Browser**
-   ```
-   Agent: "I'll open the Alpaca registration page for you."
-   # Wizard opens: https://alpaca.markets/docs/trading/paper-trading/
-   ```
-
-3. **Guide User Through Registration**
-   ```
-   Agent: "Please follow these steps:
-   1. Click 'Sign Up' on the Alpaca website
-   2. Fill in your information and create an account
-   3. Check your email and verify your account
-   4. Log in to your Alpaca dashboard
-   5. Go to 'API Keys' section
-   6. Click 'Generate New Key' for Paper Trading
-   7. Copy both the API Key and Secret Key
-   8. Come back here when you're ready"
-   ```
-
-4. **Wait for User Input**
-   ```
-   Agent: "Do you have your API keys now?"
-   User: "Yes"
-   Agent: "Great! The wizard will prompt you to enter them."
-   ```
-
-5. **Collect Keys**
-   ```
-   # Wizard prompts:
-   API Key: [user pastes key]
-   Secret Key: [user pastes secret]
-   ```
-
-6. **Save Configuration**
-   ```
-   # Wizard automatically:
-   - Saves to ~/.zshrc (or ~/.bashrc, ~/.profile)
-   - Sets ALPACA_PAPER=true
-   - Displays confirmation
-   ```
-
-7. **Verify Setup**
-   ```bash
-   # Agent runs:
-   source ~/.zshrc
-   alpaca clock
-   
-   Agent: "✓ Setup complete! Your Alpaca paper trading account is ready.
-   You have $100,000 in virtual money to practice with."
-   ```
-
-#### Agent Best Practices
-
-**When to Use Init:**
-- User asks to "set up Alpaca" or "start trading"
-- User mentions they don't have an Alpaca account
-- Commands fail with "API keys not configured" error
-
-**Communication Tips:**
-```
-Good: "I'll help you set up Alpaca paper trading. This is a safe 
-      practice account with virtual money. Let me guide you through it."
-
-Bad:  "Run alpaca init and follow the prompts."
-```
-
-**Error Handling:**
-```bash
-# If init fails, agent should:
-1. Check if browser opened successfully
-2. Ask user if they completed registration
-3. Verify keys were entered correctly
-4. Test with: alpaca clock
-5. If still failing, suggest manual auth:
-   alpaca auth
-```
-
-**Security Reminders:**
-```
-Agent should remind user:
-- "These are Paper Trading keys (virtual money only)"
-- "Never share your Secret Key with anyone"
-- "I won't store your keys - they're saved in your shell config"
-```
-
-#### Example Agent Conversation
-
+**Example:**
 ```
 User: "I want to start trading stocks"
-
-Agent: "Great! I can help you set up Alpaca paper trading. This gives 
-       you $100,000 in virtual money to practice with - no real money 
-       at risk. Let me check if you're already set up..."
-       
-       *runs: alpaca clock*
-       
-Agent: "You're not set up yet. I'll guide you through registration. 
-       Do you have an Alpaca account already?"
-
-User: "No"
-
-Agent: "No problem! I'll help you create one. 
+Agent: "I'll help you set up Alpaca paper trading (virtual money, no risk)."
        *runs: alpaca init*
-       
-       I'm opening the Alpaca registration page. Please:
-       1. Sign up with your email
-       2. Verify your email
-       3. Generate Paper Trading API keys
-       4. Come back here with your keys
-       
-       Let me know when you're ready!"
-
-User: "I have the keys"
-
-Agent: "Perfect! Please enter them when prompted..."
-       
-       *wizard collects keys*
-       
-Agent: "✓ All set! Let me verify...
-       *runs: alpaca clock*
-       
-       Your account is active! Market is currently CLOSED.
-       You have $100,000 in paper money to trade with.
-       
-       What would you like to do? Check a stock price? View your account?"
+       *follows the wizard's prompts*
+Agent: "✓ Setup complete! You have $100,000 in paper money to practice with."
 ```
 
-#### Future Enhancements
-
-**Planned for Automatic Mode:**
-- Browser skill integration for form filling
-- Email skill integration for verification
-- Automatic key extraction from dashboard
-- Support for multiple email providers (Gmail, Outlook, etc.)
-- CAPTCHA handling (if needed)
-- Error recovery and retry logic
-
-**To Enable Full Automation:**
-Agent needs to check for these skills:
-```bash
-# Check for browser skill
-which browser || check browser skill availability
-
-# Check for email skill  
-which gog || check email skill availability
-
-# If both available: use automatic mode
-# If not: fallback to manual mode
-```
+The `init` wizard handles all the complexity - agents just need to run it and follow along.
