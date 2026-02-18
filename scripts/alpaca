@@ -29,7 +29,7 @@ def get_credentials():
     
     if not api_key or not secret_key:
         print("Error: Please set ALPACA_API_KEY and ALPACA_SECRET_KEY environment variables")
-        print("\nRun 'alpaca auth' to configure your API keys")
+        print("\nRun 'alpaca auth' or 'alpaca setup-wizard' to configure your API keys")
         sys.exit(1)
     
     return api_key, secret_key, paper
@@ -67,6 +67,116 @@ def cmd_auth():
     
     print(f"\n✓ Configuration saved to {shell_config}")
     print("✓ Restart your terminal or run: source", shell_config)
+
+
+def cmd_setup_wizard():
+    """Interactive setup wizard for first-time users."""
+    print()
+    print("=" * 60)
+    print("  ALPACA SETUP WIZARD")
+    print("=" * 60)
+    print()
+    
+    # Check if already configured
+    api_key = os.getenv('ALPACA_API_KEY')
+    secret_key = os.getenv('ALPACA_SECRET_KEY')
+    
+    if api_key and secret_key:
+        print("✓ Alpaca is already configured!")
+        print(f"  API Key: {api_key[:8]}...")
+        print(f"  Paper Trading: {os.getenv('ALPACA_PAPER', 'true')}")
+        print()
+        reconfigure = input("Reconfigure? (yes/no): ").strip().lower()
+        if reconfigure != 'yes':
+            print("\nSetup canceled.")
+            return
+    
+    print("This wizard will help you set up Alpaca paper trading.")
+    print()
+    print("Options:")
+    print("1. Automatic (requires email access for verification)")
+    print("2. Manual (you register and provide API keys)")
+    print()
+    
+    choice = input("Choose setup mode (1 or 2): ").strip()
+    
+    if choice == "1":
+        print("\n🤖 Automatic setup selected")
+        print("⚠️  This requires:")
+        print("  - Browser automation capability")
+        print("  - Email access for verification")
+        print("  - Agent will register on your behalf")
+        print()
+        
+        confirm = input("Continue with automatic setup? (yes/no): ").strip().lower()
+        if confirm != 'yes':
+            print("\nFalling back to manual setup...")
+            choice = "2"
+        else:
+            print("\n❌ Automatic registration not yet implemented")
+            print("This feature requires:")
+            print("  - Browser skill integration")
+            print("  - Email skill integration")
+            print("  - User information (name, address, etc.)")
+            print()
+            print("For now, please use manual setup (option 2)")
+            print()
+            choice = "2"
+    
+    if choice == "2":
+        print("\n📋 Manual setup selected")
+        print()
+        print("Steps:")
+        print("1. Visit https://alpaca.markets")
+        print("2. Click 'Sign Up' and create an account")
+        print("3. Verify your email")
+        print("4. Go to Dashboard → API Keys")
+        print("5. Generate Paper Trading API keys")
+        print("6. Copy the keys and return here")
+        print()
+        
+        open_browser = input("Open Alpaca website now? (yes/no): ").strip().lower()
+        if open_browser == 'yes':
+            import webbrowser
+            webbrowser.open('https://alpaca.markets/docs/trading/paper-trading/')
+            print("✓ Browser opened to Alpaca paper trading docs")
+            print()
+        
+        print("Once you have your API keys, enter them below:")
+        print()
+        
+        api_key = input("API Key: ").strip()
+        secret_key = input("Secret Key: ").strip()
+        
+        if not api_key or not secret_key:
+            print("\n❌ API keys cannot be empty")
+            return
+        
+        # Save to shell config
+        shell_config = os.path.expanduser("~/.zshrc")
+        if not os.path.exists(shell_config):
+            shell_config = os.path.expanduser("~/.bashrc")
+        if not os.path.exists(shell_config):
+            shell_config = os.path.expanduser("~/.profile")
+        
+        with open(shell_config, 'a') as f:
+            f.write(f'\n# Alpaca Trading API (Paper Trading)\n')
+            f.write(f'export ALPACA_API_KEY="{api_key}"\n')
+            f.write(f'export ALPACA_SECRET_KEY="{secret_key}"\n')
+            f.write(f'export ALPACA_PAPER="true"\n')
+        
+        print()
+        print("=" * 60)
+        print("✓ Setup complete!")
+        print("=" * 60)
+        print()
+        print(f"Configuration saved to: {shell_config}")
+        print()
+        print("Next steps:")
+        print("1. Restart your terminal or run: source", shell_config)
+        print("2. Test with: alpaca clock")
+        print("3. Check account: alpaca account")
+        print()
 
 
 def cmd_clock():
@@ -429,6 +539,9 @@ def main():
     # auth
     subparsers.add_parser('auth', help='Configure API credentials')
     
+    # setup-wizard
+    subparsers.add_parser('setup-wizard', help='Interactive setup wizard for first-time users')
+    
     # clock
     subparsers.add_parser('clock', help='Check market status')
     
@@ -489,6 +602,8 @@ def main():
     try:
         if args.command == 'auth':
             cmd_auth()
+        elif args.command == 'setup-wizard':
+            cmd_setup_wizard()
         elif args.command == 'clock':
             cmd_clock()
         elif args.command == 'calendar':
