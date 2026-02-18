@@ -1,9 +1,10 @@
 ---
 name: alpaca-py-cli
-description: Trade stocks and crypto via Alpaca API using Python CLI. Use for market data (quotes, bars, news), placing orders (market, limit, stop), checking positions, portfolio management, and account info. Supports both paper and live trading. Use when user asks about stock prices, wants to buy/sell securities, check portfolio, or manage trades.
-metadata: {"clawdbot":{"emoji":"📈","requires":{"bins":["python3"],"packages":["alpaca-py","pytz"]},"install":[{"id":"pip-alpaca","kind":"pip","package":"alpaca-py","label":"Install alpaca-py (pip3 install alpaca-py)"},{"id":"pip-pytz","kind":"pip","package":"pytz","label":"Install pytz (pip3 install pytz)"}],"setup":{"instructions":["Get API keys from https://alpaca.markets","Run: alpaca auth (interactive setup)","Test: alpaca clock"]}}}
+description: AI agent skill for Alpaca Markets trading. Intelligent setup wizard (alpaca init) guides users through registration. Trade stocks/crypto, manage portfolios, execute orders via natural language. Token-efficient design with runtime guidance. Paper trading by default ($100k virtual money).
+metadata: {"clawdbot":{"emoji":"📈","requires":{"bins":["python3"],"packages":["alpaca-py","pytz"]},"install":[{"id":"pip-alpaca","kind":"pip","package":"alpaca-py","label":"Install alpaca-py (pip3 install alpaca-py)"},{"id":"pip-pytz","kind":"pip","package":"pytz","label":"Install pytz (pip3 install pytz)"}],"setup":{"instructions":["Run: alpaca init (intelligent setup wizard)","Or get API keys from https://alpaca.markets and run: alpaca auth","Test: alpaca clock"]}}}
 homepage: https://github.com/zijunl/alpaca-py-cli
 ---
+
 
 # Alpaca Trading (Python CLI)
 
