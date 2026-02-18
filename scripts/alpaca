@@ -29,7 +29,7 @@ def get_credentials():
     
     if not api_key or not secret_key:
         print("Error: Please set ALPACA_API_KEY and ALPACA_SECRET_KEY environment variables")
-        print("\nRun 'alpaca auth' or 'alpaca setup-wizard' to configure your API keys")
+        print("\nRun 'alpaca init' or 'alpaca auth' to configure your API keys")
         sys.exit(1)
     
     return api_key, secret_key, paper
@@ -69,11 +69,11 @@ def cmd_auth():
     print("✓ Restart your terminal or run: source", shell_config)
 
 
-def cmd_setup_wizard():
+def cmd_init():
     """Interactive setup wizard for first-time users."""
     print()
     print("=" * 60)
-    print("  ALPACA SETUP WIZARD")
+    print("  ALPACA INITIALIZATION")
     print("=" * 60)
     print()
     
@@ -536,11 +536,11 @@ def main():
     parser = argparse.ArgumentParser(description='Alpaca Trading CLI')
     subparsers = parser.add_subparsers(dest='command', help='Commands')
     
-    # auth
-    subparsers.add_parser('auth', help='Configure API credentials')
+    # init
+    subparsers.add_parser('init', help='Initialize Alpaca setup (first-time setup wizard)')
     
-    # setup-wizard
-    subparsers.add_parser('setup-wizard', help='Interactive setup wizard for first-time users')
+    # auth
+    subparsers.add_parser('auth', help='Configure API credentials (quick setup)')
     
     # clock
     subparsers.add_parser('clock', help='Check market status')
@@ -600,10 +600,10 @@ def main():
         sys.exit(1)
     
     try:
-        if args.command == 'auth':
+        if args.command == 'init':
+            cmd_init()
+        elif args.command == 'auth':
             cmd_auth()
-        elif args.command == 'setup-wizard':
-            cmd_setup_wizard()
         elif args.command == 'clock':
             cmd_clock()
         elif args.command == 'calendar':

@@ -415,12 +415,12 @@ export PATH="$HOME/.openclaw/workspace/skills/alpaca-py-cli/scripts:$PATH"
 - Trading API: https://docs.alpaca.markets/docs/trading-api
 - Market Data API: https://docs.alpaca.markets/docs/market-data
 
-## Setup Wizard (For Agents)
+## Initialization (For Agents)
 
 ### Intelligent Setup
 
 ```bash
-alpaca setup-wizard
+alpaca init
 ```
 
 This interactive wizard helps agents set up Alpaca automatically:
@@ -443,7 +443,7 @@ This interactive wizard helps agents set up Alpaca automatically:
 **Agent Usage:**
 When a user asks to set up Alpaca trading, run:
 ```bash
-alpaca setup-wizard
+alpaca init
 ```
 
 The wizard will:
