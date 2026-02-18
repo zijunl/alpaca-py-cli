@@ -1,9 +1,56 @@
 ---
 name: alpaca-py-cli
-description: AI agent skill for Alpaca Markets trading. Intelligent setup wizard (alpaca init) guides users through registration. Trade stocks/crypto, manage portfolios, execute orders via natural language. Token-efficient design with runtime guidance. Paper trading by default ($100k virtual money).
-metadata: {"clawdbot":{"emoji":"📈","requires":{"bins":["python3"],"packages":["alpaca-py","pytz"]},"install":[{"id":"pip-alpaca","kind":"pip","package":"alpaca-py","label":"Install alpaca-py (pip3 install alpaca-py)"},{"id":"pip-pytz","kind":"pip","package":"pytz","label":"Install pytz (pip3 install pytz)"}],"setup":{"instructions":["Run: alpaca init (intelligent setup wizard)","Or get API keys from https://alpaca.markets and run: alpaca auth","Test: alpaca clock"]}}}
+description: AI agent skill for Alpaca Markets trading. Intelligent setup wizard (alpaca init) guides users through registration. Trade stocks/crypto, manage portfolios, execute orders via natural language. Token-efficient design with runtime guidance. Paper trading by default ($100k virtual money). IMPORTANT - Setup requires user interaction to configure API keys in shell environment.
+metadata: {"clawdbot":{"emoji":"📈","requires":{"bins":["python3"],"packages":["alpaca-py","pytz"],"env":["ALPACA_API_KEY","ALPACA_SECRET_KEY","ALPACA_PAPER"]},"install":[{"id":"pip-alpaca","kind":"pip","package":"alpaca-py","label":"Install alpaca-py (pip3 install alpaca-py)"},{"id":"pip-pytz","kind":"pip","package":"pytz","label":"Install pytz (pip3 install pytz)"}],"setup":{"instructions":["USER must run: alpaca init (interactive setup - requires user input)","USER will be prompted to enter API keys manually","Keys are saved to shell config by the CLI (user consent required)","Test: alpaca clock"],"warnings":["Setup modifies shell startup files (~/.zshrc, ~/.bashrc, ~/.profile)","API keys will be stored as environment variables","User must provide explicit consent before running setup","Do not run setup autonomously - requires user interaction"]}}}
 homepage: https://github.com/zijunl/alpaca-py-cli
 ---
+
+# Alpaca Trading (Python CLI) - OpenClaw Agent Skill
+
+[![ClawHub](https://img.shields.io/badge/ClawHub-alpaca--py--cli-blue)](https://clawhub.ai/skills/alpaca-py-cli)
+[![GitHub](https://img.shields.io/badge/GitHub-zijunl%2Falpaca--py--cli-green)](https://github.com/zijunl/alpaca-py-cli)
+
+Trade stocks and crypto programmatically via Alpaca's API using a Python-based CLI tool.
+
+## ⚠️ Security & Setup Requirements
+
+**IMPORTANT - READ BEFORE USE:**
+
+This skill requires **user interaction** for setup. Do NOT run setup commands autonomously.
+
+**What happens during setup:**
+- `alpaca init` prompts user to enter API keys interactively
+- Keys are saved to shell startup files (~/.zshrc, ~/.bashrc, or ~/.profile)
+- This creates persistent environment variables accessible to all shell sessions
+- User must provide explicit consent before the CLI writes to shell config
+
+**Security considerations:**
+- ✅ API keys are stored as environment variables (standard practice)
+- ✅ Secret key input is hidden during entry
+- ✅ Paper trading by default (virtual money, no risk)
+- ⚠️ Keys in shell config are accessible to any process in that shell
+- ⚠️ Agent can read environment variables if it has shell access
+- ⚠️ Setup modifies user's shell configuration files
+
+**Recommended practices:**
+1. **Run setup manually** - Do not let agents run `alpaca init` autonomously
+2. **Use paper trading keys** - Test with virtual money first
+3. **Review before consent** - Understand what files will be modified
+4. **Least privilege** - Use API keys with minimal required permissions
+5. **Monitor activity** - Check your Alpaca account regularly
+
+**For agents:**
+- Do NOT run `alpaca init` or `alpaca auth` without explicit user permission
+- Inform user that setup will modify shell configuration files
+- Explain that API keys will be stored as environment variables
+- Get user consent before proceeding with setup
+
+**Links:**
+- ClawHub: https://clawhub.ai/skills/alpaca-py-cli
+- GitHub: https://github.com/zijunl/alpaca-py-cli
+- Alpaca Markets: https://alpaca.markets
+
+
 
 
 # Alpaca Trading (Python CLI)

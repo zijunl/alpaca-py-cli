@@ -3,9 +3,12 @@
 > **🤖 AI Agent Skill for OpenClaw**  
 > Enable your AI agent to trade stocks and crypto via Alpaca Markets API using natural language commands.
 
+> **⚠️ SECURITY NOTICE**  
+> This skill requires **user interaction** for setup. Setup modifies shell configuration files and stores API keys as environment variables. Do NOT run `alpaca init` autonomously without user consent.
+
 [![ClawHub](https://img.shields.io/badge/ClawHub-alpaca--py--cli-blue)](https://clawhub.ai/skills/alpaca-py-cli)
 [![GitHub](https://img.shields.io/badge/GitHub-zijunl%2Falpaca--py--cli-green)](https://github.com/zijunl/alpaca-py-cli)
-[![Version](https://img.shields.io/badge/version-1.6.0-orange)](https://clawhub.ai/skills/alpaca-py-cli)
+[![Version](https://img.shields.io/badge/version-1.6.1-orange)](https://clawhub.ai/skills/alpaca-py-cli)
 
 ## 🤖 What is this?
 
@@ -14,15 +17,17 @@ This is an **OpenClaw Agent Skill** that gives your AI assistant the ability to:
 - Manage your trading portfolio
 - Execute buy/sell orders
 - View trading history and performance
-- **Set up Alpaca accounts automatically** with intelligent guided wizard
+- **Set up Alpaca accounts with guided wizard** (requires user interaction)
 - All through natural language conversation!
 
 **Example conversation:**
 ```
 You: "I want to start trading stocks"
-Agent: "I'll help you set up Alpaca paper trading."
-       *runs: alpaca init*
-       *guides you through registration*
+Agent: "I'll help you set up Alpaca paper trading. This requires your input."
+       "The setup will save API keys to your shell config. Is that okay?"
+User: "Yes"
+Agent: *runs: alpaca init*
+       *user follows prompts and enters keys*
 Agent: "✓ Setup complete! You have $100,000 in virtual money."
 
 You: "What's the current price of Apple stock?"
@@ -31,6 +36,55 @@ Agent: *runs alpaca quote AAPL* "AAPL is trading at $250.32"
 You: "Buy 10 shares"
 Agent: *runs alpaca buy AAPL 10* "✓ Order placed for 10 shares of AAPL"
 ```
+
+## ⚠️ Security & Setup Requirements
+
+**IMPORTANT - READ BEFORE INSTALLING:**
+
+### What Happens During Setup
+
+When you run `alpaca init`:
+1. CLI prompts you to enter API keys interactively
+2. Keys are saved to shell startup files (~/.zshrc, ~/.bashrc, or ~/.profile)
+3. This creates persistent environment variables (ALPACA_API_KEY, ALPACA_SECRET_KEY, ALPACA_PAPER)
+4. These variables are accessible to all processes in your shell
+
+### Security Considerations
+
+✅ **Good:**
+- API keys stored as environment variables (standard practice)
+- Secret key input is hidden during entry
+- Paper trading by default (virtual money, no risk)
+- User must explicitly enter keys (not auto-fetched)
+
+⚠️ **Be Aware:**
+- Keys in shell config are accessible to any process in that shell
+- Agents with shell access can read environment variables
+- Setup modifies your shell configuration files
+- Changes persist across terminal sessions
+
+### Recommended Practices
+
+1. **Run setup manually** - Do not let agents run `alpaca init` autonomously
+2. **Use paper trading keys** - Test with virtual money first ($100k)
+3. **Review before consent** - Understand what files will be modified
+4. **Least privilege** - Use API keys with minimal required permissions
+5. **Monitor activity** - Check your Alpaca account regularly
+6. **Secure your shell** - Protect files like ~/.zshrc from unauthorized access
+
+### For Agent Developers
+
+**Do NOT:**
+- Run `alpaca init` or `alpaca auth` without explicit user permission
+- Modify shell configuration files autonomously
+- Store or transmit user API keys
+
+**DO:**
+- Inform user that setup will modify shell configuration
+- Explain that API keys will be stored as environment variables
+- Get explicit user consent before proceeding
+- Let the user run setup commands themselves when possible
+
 
 ## ✨ Key Features
 
