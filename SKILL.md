@@ -2,11 +2,20 @@
 name: alpaca-py-cli
 description: Trade stocks and crypto via Alpaca API using Python CLI. Use for market data (quotes, bars, news), placing orders (market, limit, stop), checking positions, portfolio management, and account info. Supports both paper and live trading. Use when user asks about stock prices, wants to buy/sell securities, check portfolio, or manage trades.
 metadata: {"clawdbot":{"emoji":"📈","requires":{"bins":["python3"],"packages":["alpaca-py","pytz"]},"install":[{"id":"pip-alpaca","kind":"pip","package":"alpaca-py","label":"Install alpaca-py (pip3 install alpaca-py)"},{"id":"pip-pytz","kind":"pip","package":"pytz","label":"Install pytz (pip3 install pytz)"}],"setup":{"instructions":["Get API keys from https://alpaca.markets","Run: alpaca auth (interactive setup)","Test: alpaca clock"]}}}
+homepage: https://github.com/zijunl/alpaca-py-cli
 ---
 
 # Alpaca Trading (Python CLI)
 
+[![ClawHub](https://img.shields.io/badge/ClawHub-alpaca--py--cli-blue)](https://clawhub.ai/skills/alpaca-py-cli)
+[![GitHub](https://img.shields.io/badge/GitHub-zijunl%2Falpaca--py--cli-green)](https://github.com/zijunl/alpaca-py-cli)
+
 Trade stocks and crypto programmatically via Alpaca's API using a Python-based CLI tool.
+
+**Links:**
+- ClawHub: https://clawhub.ai/skills/alpaca-py-cli
+- GitHub: https://github.com/zijunl/alpaca-py-cli
+- Alpaca Markets: https://alpaca.markets
 
 ## Overview
 
@@ -109,6 +118,39 @@ Shows:
 - Market status (🟢 OPEN or 🔴 CLOSED)
 - Current time
 - Next open/close times
+
+#### View Market Calendar
+
+```bash
+# Show next 30 trading days (default)
+alpaca calendar
+
+# Show next 7 trading days
+alpaca calendar --days 7
+```
+
+Shows trading days with open/close times (Eastern Time).
+
+#### View Portfolio History
+
+```bash
+# Default: 1 month, daily bars
+alpaca history
+
+# Last week
+alpaca history --period 1W
+
+# Last 3 months with hourly bars
+alpaca history --period 3M --timeframe 1H
+```
+
+**Periods:** 1D, 1W, 1M, 3M, 1Y, all  
+**Timeframes:** 1Min, 5Min, 15Min, 1H, 1D
+
+Shows:
+- Start and end equity
+- Total change ($ and %)
+- Recent history (last 10 data points)
 
 ### Portfolio Management
 
@@ -247,8 +289,11 @@ alpaca orders --status all
 # View current positions
 alpaca positions
 
-# Check market status
-alpaca clock
+# View portfolio history
+alpaca history --period 1M
+
+# Check market calendar
+alpaca calendar --days 7
 ```
 
 ### Risk Management
@@ -293,6 +338,7 @@ When the user asks about their portfolio or wants to trade:
 - Use `TimeInForce.DAY` to auto-cancel unfilled orders at market close
 - Monitor positions regularly with `alpaca positions`
 - Check order status with `alpaca orders`
+- Review portfolio performance with `alpaca history`
 - Use `alpaca cancel-all` to quickly cancel all pending orders
 - Use `alpaca close-all` with caution (requires confirmation)
 - Set stop-loss orders for risk management
